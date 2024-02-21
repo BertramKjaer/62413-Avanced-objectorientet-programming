@@ -14,4 +14,4 @@ This code is used for: something.
 Made by:
 - Bertram Kjaer
 - Oscar Maxwell
-- Magnuss Bruus Jen
+- Magnuss Bruus Jensen
