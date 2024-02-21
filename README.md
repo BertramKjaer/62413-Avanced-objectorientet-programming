@@ -9,3 +9,9 @@ To run this code these steps shuld be followed:
 
 ### Uses
 This code is used for: something.
+
+### Contributers
+Made by:
+- Bertram Kjaer
+- Oscar Maxwell
+- Magnuss Bruus Jen
