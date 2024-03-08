@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/QuizProgram.styles.css" asp-append-version="true" />
 </head>
+
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -33,10 +35,53 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="container mt-5">
+
+        @RenderBody()
+
+        <div class="row text-center mb-4">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <div class="col">
+                    <a href="#" class="icon-link">
+                        <i class="fas fa-icons fa-3x"></i>
+                        @if (i == 1)
+                        {
+                            <p>Create new quiz</p>
+                        }
+                        @if (i == 2)
+                        {
+                            <p>Host existing quiz</p>
+                        }
+                        @if (i == 3)
+                        {
+                            <p>Review old quizzes</p>
+                        }
+                        @if (i == 4)
+                        {
+                            <p>View Grade Distribution</p>
+                        }
+                        @if (i == 5)
+                        {
+                            <p>Bigmag solos</p>
+                        }
+                    </a>
+                </div>
+            }
+        </div>
+        <div class="row text-center mb-4">
+            @for (int i = 6; i <= 10; i++)
+            {
+                <div class="col">
+                    <a href="#" class="icon-link">
+                        <i class="fas fa-icons fa-3x"></i>
+                        <p>Icon Text @i</p>
+                    </a>
+                </div>
+            }
+        </div>
+
+
     </div>
 
     <footer class="border-top footer text-muted">
@@ -51,4 +96,5 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
