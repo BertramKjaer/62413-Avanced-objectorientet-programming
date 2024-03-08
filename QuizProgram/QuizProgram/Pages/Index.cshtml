@@ -32,12 +32,9 @@
         //Prevents the form from submitting normally
         event.preventDefault();
 
-        var hasAccess = @Model.GetAccess()
-        
         // Redirect to the home page
-        window.location.href = "/home";
-
-        alert(hasAccess)
-            
+        if (@Model.GetAccess()) {
+            window.location.href = "/home";
+        }
     }
 </script>

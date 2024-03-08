@@ -12,10 +12,11 @@ namespace QuizProgram.Pages
             _logger = logger;
         }
 
-        public string GetAccess()
+        public int GetAccess()
         {
-            return "true";
+            return 1;
         }
+
     }
 
 }
