@@ -46,3 +46,16 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+
+html, body {
+    height: 100%;
+}
+
+.container {
+    height: 100%;
+}
+
+.form-control {
+    width: 100%; /* Adjust width as needed, can be in percentage or fixed pixels */
+}
