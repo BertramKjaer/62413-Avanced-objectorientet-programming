@@ -1,5 +1,6 @@
 ﻿@page
 @model IndexModel
+
 @{
     Layout = "./Shared/Layouts/_LoginLayout.cshtml";
     ViewData["Title"] = "Login";
@@ -10,7 +11,7 @@
 <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-6 col-md-4">
-            <form method="post" class="text-center">
+            <form method="post" class="text-center" onsubmit="redirectToHomePage(event)">
                 <div class="form-group">
                     <label for="DTU_mail">DTU mail</label>
                     <input type="text" id="DTU_mail" name="DTU_mail" class="form-control" required />
@@ -19,23 +20,24 @@
                     <label for="DTU_password">DTU Password</label>
                     <input type="password" id="DTU_password" name="DTU_password" class="form-control" required />
                 </div>
-                <button type="submit" class="btn btn-primary" onclick="redirectToHomePage()">Login</button>
+                <button type="submit" class="btn btn-primary">Login</button>
             </form>
         </div>
     </div>
 </div>
-
+    
 <script>
-    function redirectToHomePage() {
-      
-        var username = document.getElementById('DTU_mail').value;
+    function redirectToHomePage(event) {
 
-        // Check if the username is not empty
-        if (username.trim() !== '') {
-            // Change the page using the username (you can replace the URL with the desired page)
-            window.location.href = '/' + username;
-        } else {
-            // Display an alert if the username is empty
-            alert('Please enter a username');
+        //Prevents the form from submitting normally
+        event.preventDefault();
+
+        var hasAccess = @Model.GetAccess()
+        
+        // Redirect to the home page
+        window.location.href = "/home";
+
+        alert(hasAccess)
+            
     }
 </script>
