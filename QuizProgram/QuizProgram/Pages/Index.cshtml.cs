@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace QuizProgram.Pages
@@ -12,9 +12,10 @@ namespace QuizProgram.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public string GetAccess()
         {
-
+            return "true";
         }
     }
+
 }
