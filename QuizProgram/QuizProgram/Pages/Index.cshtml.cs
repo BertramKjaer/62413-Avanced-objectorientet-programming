@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace QuizProgram.Pages
@@ -17,4 +17,5 @@ namespace QuizProgram.Pages
 
         }
     }
+
 }

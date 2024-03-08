@@ -1,14 +1,41 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    Layout = "./Shared/Layouts/_LoginLayout.cshtml";
+    ViewData["Title"] = "Login";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Home Page</h1>
-    <p>Example of how the front page could look for a proffessor entering the site</p>
+<h1>@ViewData["Title"]</h1>
+
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-6 col-md-4">
+            <form method="post" class="text-center">
+                <div class="form-group">
+                    <label for="DTU_mail">DTU mail</label>
+                    <input type="text" id="DTU_mail" name="DTU_mail" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="DTU_password">DTU Password</label>
+                    <input type="password" id="DTU_password" name="DTU_password" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="redirectToHomePage()">Login</button>
+            </form>
+        </div>
+    </div>
 </div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<script>
+    function redirectToHomePage() {
+      
+        var username = document.getElementById('DTU_mail').value;
 
-
+        // Check if the username is not empty
+        if (username.trim() !== '') {
+            // Change the page using the username (you can replace the URL with the desired page)
+            window.location.href = '/' + username;
+        } else {
+            // Display an alert if the username is empty
+            alert('Please enter a username');
+    }
+</script>
