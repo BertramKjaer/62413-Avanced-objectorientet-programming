@@ -47,21 +47,3 @@ button.accept-policy {
   line-height: 60px;
 }
 
-.icon-link {
-    color: black;
-    text-decoration: none;
-    display: block;
-}
-
-    .icon-link:hover {
-        color: #0056b3;
-        text-decoration: none;
-    }
-
-    .icon-link i {
-        margin-bottom: 0.5rem;
-    }
-
-    .icon-link p {
-        margin: 0;
-    }
