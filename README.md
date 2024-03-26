@@ -15,3 +15,8 @@ Made by:
 - Bertram Kjaer
 - Oscar Maxwell
 - Magnuss Bruus Jensen
+
+### Tests
+To run tests:
+- remember to "npm install"
+- run "npx playwright test" to run the tests
