@@ -1,18 +1,25 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace QuizProgram.Data;
 
-public class QuizProgramContext : IdentityDbContext<ApplicationUser>
+public class QuizProgramContext : DbContext
 {
     public QuizProgramContext(DbContextOptions<QuizProgramContext> options)
         : base(options)
     {
     }
 
+    // Add DbSet properties for entities
+    public DbSet<User> Users { get; set; }
+    public DbSet<Student> Students { get; set; }
+    public DbSet<Professor> Professors { get; set; }
+    public DbSet<Course> Courses { get; set; }
+    public DbSet<Quiz> Quizzes { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder); // This needs to be called first
+
         // Configure one-to-one relationships
         modelBuilder.Entity<User>()
             .HasOne(u => u.Student)
@@ -44,7 +51,5 @@ public class QuizProgramContext : IdentityDbContext<ApplicationUser>
             .HasMany(u => u.Quizzes)
             .WithOne(q => q.User)
             .HasForeignKey(q => q.UserId);
-
-        // Additional Fluent API configurations as needed
     }
 }

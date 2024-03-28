@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<QuizProgram.Data.QuizProgramContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("QuizProgramContext") ??
+        "Data Source=quiz.db")); // Connection string from configuration or default
 
 var app = builder.Build();
 
