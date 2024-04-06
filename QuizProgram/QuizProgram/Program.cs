@@ -1,17 +1,13 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using QuizProgram.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("QuizProgramContextConnection") ?? throw new InvalidOperationException("Connection string 'QuizProgramContextConnection' not found.");
-
-builder.Services.AddDbContext<QuizProgramContext>(options => options.UseSqlite(connectionString));
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<QuizProgramContext>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<QuizProgram.Data.QuizProgramContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("QuizProgramContext") ??
+        "Data Source=quiz.db")); // Connection string from configuration or default
 
 var app = builder.Build();
 
