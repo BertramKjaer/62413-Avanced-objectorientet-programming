@@ -2,7 +2,7 @@
 {
     public class Course
     {
-        public int CourseId { get; set; } // Primary key
+        public string CourseId { get; set; } // Primary key
         public string Name { get; set; }
 
         // Navigation properties

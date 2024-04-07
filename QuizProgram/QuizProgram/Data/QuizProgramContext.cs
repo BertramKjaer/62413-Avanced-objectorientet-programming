@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuizProgram.Data;
 
-public class QuizProgramContext : DbContext
+public class QuizProgramContext : IdentityDbContext<ApplicationUser>
 {
     public QuizProgramContext(DbContextOptions<QuizProgramContext> options)
         : base(options)
@@ -10,7 +11,6 @@ public class QuizProgramContext : DbContext
     }
 
     // Add DbSet properties for entities
-    public DbSet<User> Users { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Professor> Professors { get; set; }
     public DbSet<Course> Courses { get; set; }
@@ -21,15 +21,15 @@ public class QuizProgramContext : DbContext
         base.OnModelCreating(modelBuilder); // This needs to be called first
 
         // Configure one-to-one relationships
-        modelBuilder.Entity<User>()
+        modelBuilder.Entity<ApplicationUser>()
             .HasOne(u => u.Student)
-            .WithOne(s => s.User)
-            .HasForeignKey<User>(u => u.StudentId);
+            .WithOne(s => s.ApplicationUser)
+            .HasForeignKey<ApplicationUser>(u => u.StudentId);
 
-        modelBuilder.Entity<User>()
+        modelBuilder.Entity<ApplicationUser>()
             .HasOne(u => u.Professor)
-            .WithOne(p => p.User)
-            .HasForeignKey<User>(u => u.ProfessorId);
+            .WithOne(p => p.ApplicationUser)
+            .HasForeignKey<ApplicationUser>(u => u.ProfessorId);
 
         // Configure one-to-many relationships
         modelBuilder.Entity<Course>()
@@ -47,9 +47,9 @@ public class QuizProgramContext : DbContext
             .WithOne(q => q.Course)
             .HasForeignKey(q => q.CourseId);
 
-        modelBuilder.Entity<User>()
+        modelBuilder.Entity<ApplicationUser>()
             .HasMany(u => u.Quizzes)
-            .WithOne(q => q.User)
+            .WithOne(q => q.ApplicationUser)
             .HasForeignKey(q => q.UserId);
     }
 }

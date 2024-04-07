@@ -1,12 +1,13 @@
-﻿namespace QuizProgram.Data
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace QuizProgram.Data
 {
-   public class User
+   public class ApplicationUser : IdentityUser
     {
-        public int UserId { get; set; } // Primary key
 
         // Foreign keys
-        public int StudentId { get; set; }
-        public int ProfessorId { get; set; }
+        public string StudentId { get; set; }
+        public string ProfessorId { get; set; }
 
         // Navigation properties
         public Student Student { get; set; }
