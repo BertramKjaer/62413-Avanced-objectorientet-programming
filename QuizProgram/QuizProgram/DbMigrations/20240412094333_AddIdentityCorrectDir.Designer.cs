@@ -8,11 +8,11 @@ using QuizProgram.Data;
 
 #nullable disable
 
-namespace QuizProgram.Data.DbMigrations
+namespace QuizProgram.DbMigrations
 {
     [DbContext(typeof(QuizProgramContext))]
-    [Migration("20240407174410_AddIdentity")]
-    partial class AddIdentity
+    [Migration("20240412094333_AddIdentityCorrectDir")]
+    partial class AddIdentityCorrectDir
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
