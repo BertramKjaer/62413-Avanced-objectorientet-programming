@@ -1,0 +1,12 @@
+﻿@page
+@model QuizProgram.Pages.CreateQuiz
+
+
+<form method="post">
+    <input asp-for="QuizTitle" type="text" />
+    <span asp-validation-for="QuizTitle"></span>
+
+    <!-- Add other form inputs here, each with an asp-for attribute linked to a property in your model -->
+
+    <button type="submit">Create Quiz</button>
+</form>
