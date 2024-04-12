@@ -24,11 +24,8 @@ namespace QuizProgram.Pages
 
         public int GetAccess()
         {
-            //if (DTU_password.ToString() == "123" && DTU_mail.ToString() == "asd") {
+
                 return 1; 
-          //  } else { 
-             //   return 0; 
-           // }
             
         }
 

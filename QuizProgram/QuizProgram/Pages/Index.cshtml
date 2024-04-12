@@ -11,7 +11,6 @@
 <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-6 col-md-4">
-            <form method="post" class="text-center" onsubmit="redirectToHomePage(event)">
                 <div class="form-group">
                     <label for="DTU_mail">DTU mail</label>
                     <input type="text" id="DTU_mail" name="DTU_mail" class="form-control" required />
@@ -20,22 +19,26 @@
                     <label for="DTU_password">DTU Password</label>
                     <input type="password" id="DTU_password" name="DTU_password" class="form-control" required />
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
+                <button type="submit" class="btn btn-primary" onclick="redirectToHomePage()">Login</button>
+                
+                <button type="button" class="btn btn-secondary" onclick="redirectToCreateUserPage()">Create user</button>
+     
         </div>
     </div>
 </div>
     
 <script>
-    function redirectToHomePage(event) {
 
-        //Prevents the form from submitting normally
-        event.preventDefault();
-
-        // Redirect to the home page
+    function redirectToHomePage() {
         if (@Model.GetAccess()) {
-            alert("yo2")
             window.location.href = "/home";
         }
     }
+</script>
+
+<script>
+
+    function redirectToCreateUserPage() {
+    window.location.href = "/createUser"; 
+}
 </script>
