@@ -1,13 +1,22 @@
 using Microsoft.EntityFrameworkCore;
+using QuizProgram.Data;
+using Microsoft.AspNetCore.Authentication;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Database services
 builder.Services.AddDbContext<QuizProgram.Data.QuizProgramContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("QuizProgramContext") ??
         "Data Source=quiz.db")); // Connection string from configuration or default
+
+// Login services
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<QuizProgramContext>();
+
 
 var app = builder.Build();
 
@@ -15,7 +24,7 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    // The default HSTS value is 30 days.
     app.UseHsts();
 }
 
@@ -24,6 +33,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Login authentication
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
