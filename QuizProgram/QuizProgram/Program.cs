@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using QuizProgram.Data;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
