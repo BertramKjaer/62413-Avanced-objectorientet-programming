@@ -98,8 +98,34 @@
     <script>
         // JavaScript for adding a new question dynamically
         document.getElementById('addQuestion').addEventListener('click', function () {
-            // Implementation for adding a new question
-            alert('Add question logic goes here.');
+            // Count the current number of questions
+            var questionCount = document.querySelectorAll('.question-block').length;
+
+            // Create a new question block with the appropriate index
+            var newQuestionBlock = `
+                <div class="question-block">
+                    <div class="form-group">
+                        <label>Question ${questionCount + 1}</label>
+                        <input name="Questions[${questionCount}].QuizQuestion" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Correct Answer</label>
+                        <input name="Questions[${questionCount}].CorrectAnswer" class="form-control" />
+                    </div>`;
+
+            // Add incorrect answers
+            for (var i = 0; i < 3; i++) {
+                newQuestionBlock += `
+                    <div class="form-group">
+                        <label>Incorrect Answer ${i + 1}</label>
+                        <input name="Questions[${questionCount}].IncorrectAnswers[${i}]" class="form-control" />
+                    </div>`;
+            }
+
+            newQuestionBlock += `</div>`;
+
+            // Append the new question block to the quiz section
+            document.querySelector('.quiz-section').insertAdjacentHTML('beforeend', newQuestionBlock);
         });
     </script>
 }
