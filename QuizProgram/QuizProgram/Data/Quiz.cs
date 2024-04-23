@@ -2,17 +2,21 @@
 {
     public class Quiz
     {
-        public string QuizId { get; set; } // Primary key
+        public int QuizId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string QuestionsJson { get; set; } = string.Empty;
 
-        // Foreign keys
-        public string UserId { get; set; }
-        public string CourseId { get; set; }
-
-        public string Answer { get; set; }
-        public string Question { get; set; }
-
-        // Navigation properties
-        public ApplicationUser ApplicationUser { get; set; }
+        // Added foreign key and navigation properties
+        public string CourseId { get; set; } = string.Empty; // Should be string to match Course's ID
         public Course Course { get; set; }
+        public string UserId { get; set; } = string.Empty; // Should be string to match ApplicationUser's ID
+        public ApplicationUser ApplicationUser { get; set; }
     }
+}
+
+public class Question
+{
+    public string QuizQuestion { get; set; }
+    public string CorrectAnswer { get; set; }
+    public List<string> IncorrectAnswers { get; set; } = new List<string>();
 }

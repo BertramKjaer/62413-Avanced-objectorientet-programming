@@ -10,24 +10,24 @@
     </div>
 
     <div class="quiz-section">
-        @for (int i = 0; i < Model.NewQuiz.Questions.Count; i++)
+        @for (int i = 0; i < Model.Questions.Count; i++)
         {
             <div class="question-block">
                 <div class="form-group">
-                    <label asp-for="NewQuiz.Questions[i].QuizQuestion">Question @(i + 1)</label>
-                    <input asp-for="NewQuiz.Questions[i].QuizQuestion" class="form-control" />
+                    <label asp-for="Questions[i].QuizQuestion">Question @(i + 1)</label>
+                    <input asp-for="Questions[i].QuizQuestion" class="form-control" />
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="NewQuiz.Questions[i].CorrectAnswer">Correct Answer</label>
-                    <input asp-for="NewQuiz.Questions[i].CorrectAnswer" class="form-control" />
+                    <label asp-for="Questions[i].CorrectAnswer">Correct Answer</label>
+                    <input asp-for="Questions[i].CorrectAnswer" class="form-control" />
                 </div>
 
-                @for (int j = 0; j < Model.NewQuiz.Questions[i].IncorrectAnswers.Count; j++)
+                @for (int j = 0; j < Model.Questions[i].IncorrectAnswers.Count; j++)
                 {
                     <div class="form-group">
-                        <label asp-for="@Model.NewQuiz.Questions[i].IncorrectAnswers[j]">Incorrect Answer @(j + 1)</label>
-                        <input asp-for="@Model.NewQuiz.Questions[i].IncorrectAnswers[j]" class="form-control" />
+                        <label asp-for="@Model.Questions[i].IncorrectAnswers[j]">Incorrect Answer @(j + 1)</label>
+                        <input asp-for="@Model.Questions[i].IncorrectAnswers[j]" class="form-control" />
                     </div>
                 }
             </div>

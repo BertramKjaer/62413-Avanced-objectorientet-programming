@@ -1,21 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using QuizProgram.Data;
+using System.Text.Json;
 
-
-public class Quiz
-{
-    public string? Title { get; set; }
-    public string? TargetAudience { get; set; } // Now nullable
-    public List<Question> Questions { get; set; } = new List<Question>();
-}
-
-public class Question
-{
-    public string? QuizQuestion { get; set; } // Now nullable
-    public string? CorrectAnswer { get; set; } // Now nullable
-    public List<string> IncorrectAnswers { get; set; } = new List<string>() { "", "", "" }; // Initialized with empty strings
-}
 
 
 
@@ -23,40 +10,53 @@ namespace QuizProgram.Pages
 {
     public class CreateQuizModel : PageModel
     {
-        [BindProperty]
-        public Quiz NewQuiz { get; set; } = new Quiz(); // Make sure NewQuiz is instantiated
+        private readonly QuizProgramContext _context;
 
-        public CreateQuizModel()
+        public CreateQuizModel(QuizProgramContext context)
         {
-            // Constructor can be empty if you're not injecting services
+            _context = context;
         }
 
-        // OnGet method (only one occurrence)
+        [BindProperty]
+        public Quiz NewQuiz { get; set; }
+
+        // List<Question> only exists in the context of this PageModel for the form binding
+        [BindProperty]
+        public List<Question> Questions { get; set; }
+
         public void OnGet()
         {
-            if (NewQuiz == null || NewQuiz.Questions.Count == 0)
-            {
-                NewQuiz = new Quiz();
-                NewQuiz.Questions.Add(new Question { IncorrectAnswers = new List<string> { "", "", "" } });
-            }
+            Questions = new List<Question> {
+                new Question
+                {
+                    IncorrectAnswers = new List<string> { "", "", ""} //initialize cuz we ballin'
+                }
+            };
         }
 
-        // OnPost method (only one occurrence)
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                // Return the page with validation errors
                 return Page();
             }
 
-            // TODO: Save the quiz data to a database or in-memory store
+            // Serialize the list of questions to JSON
+            NewQuiz.QuestionsJson = JsonSerializer.Serialize(Questions);
 
-            // For now, just add it to a session or TempData to demonstrate functionality
-            TempData["Quiz"] = System.Text.Json.JsonSerializer.Serialize(NewQuiz);
+            // Add the quiz to the database context
+            _context.Quizzes.Add(NewQuiz);
 
-            // Redirect to another page after successful creation
-            return RedirectToPage("./QuizList"); // Make sure the page exists in your Pages folder
+            // Save the changes asynchronously
+            await _context.SaveChangesAsync();
+
+            // Redirect to the quiz list page or some confirmation page
+            return RedirectToPage("./QuizList");
         }
     }
+
+   
+
+
+    
 }
