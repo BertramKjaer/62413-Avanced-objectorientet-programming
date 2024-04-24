@@ -4,14 +4,16 @@ namespace QuizProgram.Data
 {
    public class ApplicationUser : IdentityUser
     {
-
         // Foreign keys
-        public string StudentId { get; set; }
-        public string ProfessorId { get; set; }
+        public bool IsStudent { get; set; }
+        public bool IsProfessor { get; set; }
 
         // Navigation properties
-        public Student Student { get; set; }
-        public Professor Professor { get; set; }
         public ICollection<Quiz> Quizzes { get; set; }
+    }
+    public enum UserType
+    {
+        Student,
+        Professor
     }
 }

@@ -27,6 +27,15 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="form-check">
+                <input asp-for="Input.UserType" class="form-check-input" type="radio" value="Student" id="studentRadio">
+                <label class="form-check-label" for="studentRadio">Register as Student</label>
+            </div>
+            <div class="form-check">
+                <input asp-for="Input.UserType" class="form-check-input" type="radio" value="Professor" id="professorRadio">
+                <label class="form-check-label" for="professorRadio">Register as Professor</label>
+            </div>
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>

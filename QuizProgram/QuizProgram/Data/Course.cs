@@ -6,8 +6,6 @@
         public string Name { get; set; }
 
         // Navigation properties
-        public ICollection<Professor> Professors { get; set; }
-        public ICollection<Student> Students { get; set; }
         public ICollection<Quiz> Quizzes { get; set; }
     }
 }

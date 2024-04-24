@@ -98,6 +98,9 @@ namespace QuizProgram.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            // Custom properties
+            public UserType UserType { get; set; }
         }
 
 
@@ -110,15 +113,26 @@ namespace QuizProgram.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
-
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    IsProfessor = Input.UserType == UserType.Professor,
+                    IsStudent = Input.UserType == UserType.Student
+                };
+                if (Input.UserType == UserType.Student)
+                {
+                    user.IsStudent = true;
+                    user.IsProfessor = false;
+                }
+                else if (Input.UserType == UserType.Professor)
+                {
+                    user.IsProfessor = true;
+                    user.IsStudent = false;
+                }
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
