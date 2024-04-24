@@ -29,15 +29,12 @@ test('Test test creation', async ({ page }) => {
   await page.locator('.icon-link', {hasText: 'Create new quiz'}).click() 
   
   await expect(page.getByRole('heading').nth(0)).toHaveText('Create New Quiz')
-
   await expect( page.getByText('Question 1')).toBeVisible()
 
   await page.getByRole('button', { name: 'Add Another Question' }).click()
-
   await expect( page.getByText('Question 2')).toBeVisible()
 
   await page.getByRole('button', { name: 'Add Another Question' }).click()
-
   await expect( page.getByText('Question 3')).toBeVisible()
 });
 
