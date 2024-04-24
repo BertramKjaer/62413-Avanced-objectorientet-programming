@@ -19,4 +19,5 @@ Made by:
 ### Tests
 To run tests:
 - remember to "npm install"
+- remember to run the server before running the tests
 - run "npx playwright test" to run the tests

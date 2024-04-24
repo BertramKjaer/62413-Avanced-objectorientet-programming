@@ -8,11 +8,11 @@ using QuizProgram.Data;
 
 #nullable disable
 
-namespace QuizProgram.DbMigrations
+namespace QuizProgram.Migrations
 {
     [DbContext(typeof(QuizProgramContext))]
-    [Migration("20240412094333_AddIdentityCorrectDir")]
-    partial class AddIdentityCorrectDir
+    [Migration("20240424110008_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,9 +95,11 @@ namespace QuizProgram.DbMigrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -135,9 +137,11 @@ namespace QuizProgram.DbMigrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
@@ -167,6 +171,12 @@ namespace QuizProgram.DbMigrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsProfessor")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsStudent")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
 
@@ -190,15 +200,7 @@ namespace QuizProgram.DbMigrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ProfessorId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("StudentId")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -217,12 +219,6 @@ namespace QuizProgram.DbMigrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("ProfessorId")
-                        .IsUnique();
-
-                    b.HasIndex("StudentId")
-                        .IsUnique();
-
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -238,26 +234,6 @@ namespace QuizProgram.DbMigrations
                     b.HasKey("CourseId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("QuizProgram.Data.Professor", b =>
-                {
-                    b.Property<string>("ProfessorId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CourseId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ProfessorId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Professors");
                 });
 
             modelBuilder.Entity("QuizProgram.Data.Quiz", b =>
@@ -288,26 +264,6 @@ namespace QuizProgram.DbMigrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Quizzes");
-                });
-
-            modelBuilder.Entity("QuizProgram.Data.Student", b =>
-                {
-                    b.Property<string>("StudentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CourseId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("StudentId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -361,36 +317,6 @@ namespace QuizProgram.DbMigrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("QuizProgram.Data.ApplicationUser", b =>
-                {
-                    b.HasOne("QuizProgram.Data.Professor", "Professor")
-                        .WithOne("ApplicationUser")
-                        .HasForeignKey("QuizProgram.Data.ApplicationUser", "ProfessorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QuizProgram.Data.Student", "Student")
-                        .WithOne("ApplicationUser")
-                        .HasForeignKey("QuizProgram.Data.ApplicationUser", "StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Professor");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("QuizProgram.Data.Professor", b =>
-                {
-                    b.HasOne("QuizProgram.Data.Course", "Course")
-                        .WithMany("Professors")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-                });
-
             modelBuilder.Entity("QuizProgram.Data.Quiz", b =>
                 {
                     b.HasOne("QuizProgram.Data.Course", "Course")
@@ -410,17 +336,6 @@ namespace QuizProgram.DbMigrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("QuizProgram.Data.Student", b =>
-                {
-                    b.HasOne("QuizProgram.Data.Course", "Course")
-                        .WithMany("Students")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-                });
-
             modelBuilder.Entity("QuizProgram.Data.ApplicationUser", b =>
                 {
                     b.Navigation("Quizzes");
@@ -428,23 +343,7 @@ namespace QuizProgram.DbMigrations
 
             modelBuilder.Entity("QuizProgram.Data.Course", b =>
                 {
-                    b.Navigation("Professors");
-
                     b.Navigation("Quizzes");
-
-                    b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("QuizProgram.Data.Professor", b =>
-                {
-                    b.Navigation("ApplicationUser")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("QuizProgram.Data.Student", b =>
-                {
-                    b.Navigation("ApplicationUser")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
