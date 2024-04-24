@@ -5,7 +5,7 @@ test.beforeEach('', async ({ page }) => {
   await page.goto('https://localhost:7288/')
 })
 
-test('Test page nagavation', async ({ page }) => {
+test('Test: page nagavation', async ({ page }) => {
 
   await expect(page.getByRole('heading')).toHaveText('Login')
 
@@ -23,7 +23,7 @@ test('Test page nagavation', async ({ page }) => {
 
 });
 
-test('Test test creation', async ({ page }) => {
+test('Test: test creation', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Login' }).click()
   await page.locator('.icon-link', {hasText: 'Create new quiz'}).click() 
