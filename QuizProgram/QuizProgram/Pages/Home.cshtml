@@ -15,44 +15,23 @@
     @for (int i = 1; i <= 5; i++)
     {
         <div class="col">
-            <a href="#" class="icon-link">
+            <a asp-page="@(i == 1 ? "CreateQuiz" : "")" class="icon-link">
                 <i class="fas fa-icons fa-3x"></i>
-                @if (i == 1)
-                {
-                    <p>Create new quiz</p>
-                }
-                @if (i == 2)
-                {
-                    <p>Host existing quiz</p>
-                }
-                @if (i == 3)
-                {
-                    <p>Review old quizzes</p>
-                }
-                @if (i == 4)
-                {
-                    <p>View Grade Distribution</p>
-                }
-                @if (i == 5)
-                {
-                    <p>Edit existing quizzes</p>
-                }
+                <p>
+                    @(i switch
+                    {
+                        1 => "Create new quiz",
+                        2 => "Host existing quiz",
+                        3 => "Review old quizzes",
+                        4 => "View Grade Distribution",
+                        5 => "Edit existing quizzes",
+                        _ => ""
+                    })
+                </p>
             </a>
         </div>
     }
 </div>
-<div class="row text-center mb-4">
-    @for (int i = 6; i <= 10; i++)
-    {
-        <div class="col">
-            <a href="#" class="icon-link">
-                <i class="fas fa-icons fa-3x"></i>
-                <p>Bigmag solos @i</p>
-            </a>
-        </div>
-    }
-</div>
-
 
 <style>
     /* This code is placed here because I cant get it to work in the correct file :o*/

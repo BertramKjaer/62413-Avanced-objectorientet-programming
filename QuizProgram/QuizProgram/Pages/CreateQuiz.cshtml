@@ -1,0 +1,105 @@
+﻿@page
+@model QuizProgram.Pages.CreateQuizModel
+
+<h2>Create New Quiz</h2>
+
+<form method="post">
+    <div class="form-group quiz-name">
+        <label asp-for="NewQuiz.Title">Quiz Name</label>
+        <input asp-for="NewQuiz.Title" class="form-control" />
+    </div>
+
+    <div class="quiz-section">
+        @for (int i = 0; i < Model.NewQuiz.Questions.Count; i++)
+        {
+            <div class="question-block">
+                <div class="form-group">
+                    <label asp-for="NewQuiz.Questions[i].QuizQuestion">Question @(i + 1)</label>
+                    <input asp-for="NewQuiz.Questions[i].QuizQuestion" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="NewQuiz.Questions[i].CorrectAnswer">Correct Answer</label>
+                    <input asp-for="NewQuiz.Questions[i].CorrectAnswer" class="form-control" />
+                </div>
+
+                @for (int j = 0; j < Model.NewQuiz.Questions[i].IncorrectAnswers.Count; j++)
+                {
+                    <div class="form-group">
+                        <label asp-for="@Model.NewQuiz.Questions[i].IncorrectAnswers[j]">Incorrect Answer @(j + 1)</label>
+                        <input asp-for="@Model.NewQuiz.Questions[i].IncorrectAnswers[j]" class="form-control" />
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <button type="button" id="addQuestion" class="btn btn-default">Add Another Question</button>
+    <button type="submit" class="btn btn-primary">Create Quiz</button>
+</form>
+
+<style>
+    .quiz-section {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .form-group.quiz-name {
+        max-width: 600px; /* Adjust this as needed */
+        margin: 0 auto 20px auto; /* Center the quiz name input and add some bottom margin */
+    }
+
+    .question-block {
+        background: #f3f3f3;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+        .form-group label {
+            display: block;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .btn-default {
+        background-color: #e7e7e7;
+        color: black;
+        margin-right: 8px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+</style>
+
+@section Scripts {
+    <script>
+        // JavaScript for adding a new question dynamically
+        document.getElementById('addQuestion').addEventListener('click', function () {
+            // Implementation for adding a new question
+            alert('Add question logic goes here.');
+        });
+    </script>
+}
