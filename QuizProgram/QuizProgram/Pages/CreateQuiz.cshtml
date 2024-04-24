@@ -35,6 +35,7 @@
     </div>
 
     <button type="button" id="addQuestion" class="btn btn-default">Add Another Question</button>
+    <button type="button" id="removeLastQuestion" class="btn btn-danger">Remove Last Question</button>
     <button type="submit" class="btn btn-primary">Create Quiz</button>
 </form>
 
@@ -89,9 +90,15 @@
         border-radius: 4px;
     }
 
-        .btn:hover {
-            opacity: 0.8;
-        }
+    .btn:hover {
+        opacity: 0.8;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
 </style>
 
 @section Scripts {
@@ -126,6 +133,13 @@
 
             // Append the new question block to the quiz section
             document.querySelector('.quiz-section').insertAdjacentHTML('beforeend', newQuestionBlock);
+        });
+
+        document.getElementById('removeLastQuestion').addEventListener('click', function () {
+            var questionBlocks = document.querySelectorAll('.question-block');
+            if (questionBlocks.length > 1) { // ensure at least one question remains
+                questionBlocks[questionBlocks.length - 1].remove();
+            }
         });
     </script>
 }
