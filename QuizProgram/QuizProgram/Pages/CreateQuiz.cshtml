@@ -5,29 +5,35 @@
 
 <form method="post">
     <div class="form-group quiz-name">
-        <label asp-for="NewQuiz.Title">Quiz Name</label>
-        <input asp-for="NewQuiz.Title" class="form-control" />
+        <label asp-for="Input.Title">Quiz Name</label>
+        <input asp-for="Input.Title" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.CourseId">Course ID</label>
+        <input asp-for="Input.CourseId" class="form-control" />
+        <span asp-validation-for="Input.CourseId" class="text-danger"></span>
     </div>
 
     <div class="quiz-section">
-        @for (int i = 0; i < Model.Questions.Count; i++)
+        @for (int i = 0; i < Model.Input.Questions.Count; i++)
         {
             <div class="question-block">
                 <div class="form-group">
-                    <label asp-for="Questions[i].QuizQuestion">Question @(i + 1)</label>
-                    <input asp-for="Questions[i].QuizQuestion" class="form-control" />
+                    <label asp-for="Input.Questions[i].QuizQuestion">Question @(i + 1)</label>
+                    <input asp-for="Input.Questions[i].QuizQuestion" class="form-control" />
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Questions[i].CorrectAnswer">Correct Answer</label>
-                    <input asp-for="Questions[i].CorrectAnswer" class="form-control" />
+                    <label asp-for="Input.Questions[i].CorrectAnswer">Correct Answer</label>
+                    <input asp-for="Input.Questions[i].CorrectAnswer" class="form-control" />
                 </div>
 
-                @for (int j = 0; j < Model.Questions[i].IncorrectAnswers.Count; j++)
+                @for (int j = 0; j < 3; j++)
                 {
                     <div class="form-group">
-                        <label asp-for="@Model.Questions[i].IncorrectAnswers[j]">Incorrect Answer @(j + 1)</label>
-                        <input asp-for="@Model.Questions[i].IncorrectAnswers[j]" class="form-control" />
+                        <label asp-for="Input.Questions[i].IncorrectAnswers[j]">Incorrect Answer @(j + 1)</label>
+                        <input asp-for="Input.Questions[i].IncorrectAnswers[j]" class="form-control" />
                     </div>
                 }
             </div>
@@ -103,43 +109,66 @@
 
 @section Scripts {
     <script>
-        // JavaScript for adding a new question dynamically
-        document.getElementById('addQuestion').addEventListener('click', function () {
-            // Count the current number of questions
+        function addNewQuestion() {
             var questionCount = document.querySelectorAll('.question-block').length;
-
-            // Create a new question block with the appropriate index
             var newQuestionBlock = `
-                <div class="question-block">
-                    <div class="form-group">
-                        <label>Question ${questionCount + 1}</label>
-                        <input name="Questions[${questionCount}].QuizQuestion" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label>Correct Answer</label>
-                        <input name="Questions[${questionCount}].CorrectAnswer" class="form-control" />
-                    </div>`;
+                        <div class="question-block">
+                            <div class="form-group">
+                                <label>Question ${questionCount + 1}</label>
+                                <input type="text" name="Input.Questions[${questionCount}].QuizQuestion" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Correct Answer</label>
+                                <input type="text" name="Input.Questions[${questionCount}].CorrectAnswer" class="form-control" />
+                            </div>`;
 
-            // Add incorrect answers
             for (var i = 0; i < 3; i++) {
                 newQuestionBlock += `
-                    <div class="form-group">
-                        <label>Incorrect Answer ${i + 1}</label>
-                        <input name="Questions[${questionCount}].IncorrectAnswers[${i}]" class="form-control" />
-                    </div>`;
+                            <div class="form-group">
+                                <label>Incorrect Answer ${i + 1}</label>
+                                <input type="text" name="Input.Questions[${questionCount}].IncorrectAnswers[${i}]" class="form-control" />
+                            </div>`;
             }
 
             newQuestionBlock += `</div>`;
-
-            // Append the new question block to the quiz section
             document.querySelector('.quiz-section').insertAdjacentHTML('beforeend', newQuestionBlock);
-        });
+        }
 
-        document.getElementById('removeLastQuestion').addEventListener('click', function () {
+        function removeLastQuestion() {
             var questionBlocks = document.querySelectorAll('.question-block');
-            if (questionBlocks.length > 1) { // ensure at least one question remains
+            if (questionBlocks.length > 1) {
                 questionBlocks[questionBlocks.length - 1].remove();
             }
+        }
+
+        document.getElementById('addQuestion').addEventListener('click', addNewQuestion);
+        document.getElementById('removeLastQuestion').addEventListener('click', removeLastQuestion);
+
+        // Debugging form submission
+        document.querySelector('form').addEventListener('submit', function (event) {
+            console.log('Form is attempting to submit.');
+            // Uncomment the next line to see if any default behavior is being prevented
+            // event.preventDefault();
         });
+
+        // TempData success message
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                window.addEventListener('DOMContentLoaded', (event) => {
+                    alert("@TempData["SuccessMessage"]");
+                });
+            </text>
+        }
+
+            // TempData error message
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                window.addEventListener('DOMContentLoaded', (event) => {
+                    alert("@TempData["ErrorMessage"]");
+                });
+            </text>
+        }
     </script>
 }

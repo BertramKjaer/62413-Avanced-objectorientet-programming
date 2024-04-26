@@ -18,6 +18,12 @@ public class QuizProgramContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder); // This needs to be called first
 
+
+        modelBuilder.Entity<Quiz>()
+        .Property(q => q.Title)
+        .IsRequired()
+        .HasMaxLength(200);
+
         // Configure one-to-one relationships
         // Currently there are none
 
