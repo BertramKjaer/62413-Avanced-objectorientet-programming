@@ -39,21 +39,36 @@ namespace QuizProgram.Pages
 
             Debug.WriteLine("Received UserId: " + Input.UserId);
 
-
+            // Check if ModelState is valid
             if (!ModelState.IsValid)
             {
                 Users = _userManager.Users.ToList(); // Reload users in case of an error
                 return Page();
             }
 
+            // Check if User and Course exist
             var userExists = await _userManager.FindByIdAsync(Input.UserId) != null;
-            Debug.WriteLine("Is UserId valid? " + userExists);
+            var courseExists = await _context.Courses.FindAsync(Input.CourseId) != null;
 
+            if (!userExists || !courseExists)
+            {
+                if (!userExists)
+                {
+                    ModelState.AddModelError("Input.UserId", "User does not exist.");
+                }
+                if (!courseExists)
+                {
+                    ModelState.AddModelError("Input.CourseId", "Course does not exist.");
+                }
+                return Page();
+            }
+
+            // Proceed to create the quiz
             var newQuiz = new Quiz
             {
                 Title = Input.Title,
                 CourseId = Input.CourseId,
-                UserId = Input.UserId, // Set the user ID from the input
+                UserId = Input.UserId,
                 Questions = Input.Questions.Select(q => new Question
                 {
                     QuizQuestion = q.QuizQuestion,

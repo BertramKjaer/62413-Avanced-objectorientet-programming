@@ -8,13 +8,12 @@ namespace QuizProgram.Data
            public bool IsStudent { get; set; }
            public bool IsProfessor { get; set; }
 
-           // Navigation properties
-           public ICollection<Quiz> Quizzes { get; set; }
-       }
-       public enum UserType
+        // Navigation properties
+        public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
+    }
+    public enum UserType
        {
            Student,
            Professor
-        
     }
 }

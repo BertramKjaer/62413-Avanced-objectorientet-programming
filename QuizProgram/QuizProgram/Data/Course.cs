@@ -6,6 +6,6 @@
         public string Name { get; set; } //= string.Empty;
 
         // Navigation properties
-        public ICollection<Quiz> Quizzes { get; set; }
+        public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
     }
 }

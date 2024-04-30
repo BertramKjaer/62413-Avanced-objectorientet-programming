@@ -18,6 +18,7 @@ builder.Services.AddDbContext<QuizProgram.Data.QuizProgramContext>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddEntityFrameworkStores<QuizProgramContext>();
 
+builder.Services.AddScoped<CourseService>();
 
 var app = builder.Build();
 
