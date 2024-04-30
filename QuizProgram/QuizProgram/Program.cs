@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using QuizProgram.Data;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 // Database services
-builder.Services.AddDbContext<QuizProgram.Data.QuizProgramContext>(options =>
+builder.Services.AddDbContext<QuizProgramContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("QuizProgramContext") ??
-        "Data Source=quiz.db")); // Connection string from configuration or default
+        "Data Source=quiz.db"));
 
 // Login services
 builder.Services.AddDefaultIdentity<ApplicationUser>()
@@ -40,5 +38,20 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+// Redirect root to login page if not signed in else redirect to home
+app.MapGet("/", async context =>
+{
+    // Check if the user is authenticated
+    if (context.User.Identity.IsAuthenticated)
+    {
+        context.Response.Redirect("/Home");
+    }
+    else
+    {
+        context.Response.Redirect("/Identity/Account/Login");
+    }
+    await Task.CompletedTask;
+});
 
 app.Run();
