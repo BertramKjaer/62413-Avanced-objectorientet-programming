@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace QuizProgram.Pages
 {
@@ -36,11 +37,17 @@ namespace QuizProgram.Pages
         {
             Users = await _userManager.Users.ToListAsync();
 
+            Debug.WriteLine("Received UserId: " + Input.UserId);
+
+
             if (!ModelState.IsValid)
             {
                 Users = _userManager.Users.ToList(); // Reload users in case of an error
                 return Page();
             }
+
+            var userExists = await _userManager.FindByIdAsync(Input.UserId) != null;
+            Debug.WriteLine("Is UserId valid? " + userExists);
 
             var newQuiz = new Quiz
             {
@@ -62,7 +69,7 @@ namespace QuizProgram.Pages
                 _context.Quizzes.Add(newQuiz);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Quiz created successfully!";
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Home");
             }
             catch (Exception ex)
             {
