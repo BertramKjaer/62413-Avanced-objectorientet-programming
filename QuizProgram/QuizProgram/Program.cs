@@ -15,7 +15,7 @@ builder.Services.AddDbContext<QuizProgram.Data.QuizProgramContext>(options =>
         "Data Source=quiz.db")); // Connection string from configuration or default
 
 // Login services
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddEntityFrameworkStores<QuizProgramContext>();
 
 
