@@ -6,25 +6,22 @@
 
 <div class="text-center">
     <h1 class="display-4">Home Page</h1>
-    <p>Example of how the front page could look for a proffessor entering the site</p>
+    <p>Example of how the front page could look for a professor entering the site</p>
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
 <div class="row text-center mb-4">
-    @for (int i = 1; i <= 5; i++)
+    @for (int i = 1; i <= 2; i++)
     {
         <div class="col">
-            <a asp-page="@(i == 1 ? "CreateQuiz" : "")" class="icon-link">
+            <a asp-page="@GetPageLink(i)" class="icon-link">
                 <i class="fas fa-icons fa-3x"></i>
                 <p>
                     @(i switch
                     {
                         1 => "Create new quiz",
-                        2 => "Host existing quiz",
-                        3 => "Review old quizzes",
-                        4 => "View Grade Distribution",
-                        5 => "Edit existing quizzes",
+                        2 => "View Quizzes",
                         _ => ""
                     })
                 </p>
@@ -34,23 +31,34 @@
 </div>
 
 <style>
-    /* This code is placed here because I cant get it to work in the correct file :o*/
-.icon-link {
-    color: black;
-    text-decoration: none;
-    display: block;
-}
-
-    .icon-link:hover {
-        color: #0056b3;
+    .icon-link {
+        color: black;
         text-decoration: none;
+        display: block;
     }
 
-    .icon-link i {
-        margin-bottom: 0.5rem;
-    }
+        .icon-link:hover {
+            color: #0056b3;
+            text-decoration: none;
+        }
 
-    .icon-link p {
-        margin: 0;
+        .icon-link i {
+            margin-bottom: 0.5rem;
+        }
+
+        .icon-link p {
+            margin: 0;
+        }
+</style>
+
+@functions {
+    private string GetPageLink(int index)
+    {
+        return index switch
+        {
+            1 => "/CreateQuiz",
+            2 => "/ViewQuiz",
+            _ => ""
+        };
     }
-    </style>
+}

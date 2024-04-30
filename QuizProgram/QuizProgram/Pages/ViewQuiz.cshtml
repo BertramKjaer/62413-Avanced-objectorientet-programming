@@ -1,0 +1,24 @@
+﻿@page
+@model QuizProgram.Pages.ViewQuizModel
+
+<h2>View Quizzes</h2>
+
+<form method="get">
+    <label for="userSelect">Select User:</label>
+    <select id="userSelect" asp-for="SelectedUserId" asp-items="@(new SelectList(Model.Users, "Id", "UserName"))">
+        <option value="" selected>Select user</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+@if (Model.Quizzes != null && Model.Quizzes.Any())
+{
+    <div>
+        <ul>
+            @foreach (var quiz in Model.Quizzes)
+            {
+                <li>@quiz.Title - @quiz.Course.Name - @quiz.ApplicationUser.UserName</li>
+            }
+        </ul>
+    </div>
+}
