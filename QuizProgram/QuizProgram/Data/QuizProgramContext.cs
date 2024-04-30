@@ -20,9 +20,9 @@ public class QuizProgramContext : IdentityDbContext<ApplicationUser>
 
 
         modelBuilder.Entity<Quiz>()
-        .Property(q => q.Title)
-        .IsRequired()
-        .HasMaxLength(200);
+        .HasMany(q => q.Questions)
+        .WithOne(q => q.Quiz)
+        .HasForeignKey(q => q.QuizId);
 
         // Configure one-to-one relationships
         // Currently there are none
@@ -32,7 +32,7 @@ public class QuizProgramContext : IdentityDbContext<ApplicationUser>
             .HasMany(c => c.Quizzes)
             .WithOne(q => q.Course)
             .HasForeignKey(q => q.CourseId);
-
+        
         modelBuilder.Entity<ApplicationUser>()
             .HasMany(u => u.Quizzes)
             .WithOne(q => q.ApplicationUser)

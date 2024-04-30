@@ -3,20 +3,28 @@
     public class Quiz
     {
         public int QuizId { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string QuestionsJson { get; set; } = string.Empty;
-
-        // Added foreign key and navigation properties
-        public string CourseId { get; set; } = string.Empty; // Should be string to match Course's ID
+        public string Title { get; set; }
+        public string CourseId { get; set; }
         public Course Course { get; set; }
-        public string UserId { get; set; } = string.Empty; // Should be string to match ApplicationUser's ID
+        public ICollection<Question> Questions { get; set; }
+
+        // Add a foreign key for ApplicationUser
+        public string UserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }
-}
 
-public class Question
-{
-    public string QuizQuestion { get; set; }
-    public string CorrectAnswer { get; set; }
-    public List<string> IncorrectAnswers { get; set; } = new List<string>();
+
+    public class Question
+    {
+        public int QuestionId { get; set; }
+        public string QuizQuestion { get; set; }
+        public string CorrectAnswer { get; set; }
+        public string IncorrectAnswer1 { get; set; }
+        public string IncorrectAnswer2 { get; set; }
+        public string IncorrectAnswer3 { get; set; }
+
+        // Foreign key to Quiz
+        public int QuizId { get; set; }
+        public Quiz Quiz { get; set; }
+    }
 }

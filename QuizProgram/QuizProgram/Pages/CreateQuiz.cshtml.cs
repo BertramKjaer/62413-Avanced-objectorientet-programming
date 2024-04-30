@@ -1,22 +1,77 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using QuizProgram.Data;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuizProgram.Pages
 {
     public class CreateQuizModel : PageModel
     {
         private readonly QuizProgramContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CreateQuizModel(QuizProgramContext context)
+        public CreateQuizModel(QuizProgramContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
         public QuizInputModel Input { get; set; }
+        public List<ApplicationUser> Users { get; set; }  // List to hold users for dropdown
+
+        public async Task OnGetAsync()
+        {
+            Users = _userManager.Users.ToList();  // Load all users for the dropdown
+            Input = new QuizInputModel
+            {
+                Questions = new List<QuestionInputModel> { new QuestionInputModel() }
+            };
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            Users = await _userManager.Users.ToListAsync();
+
+            if (!ModelState.IsValid)
+            {
+                Users = _userManager.Users.ToList(); // Reload users in case of an error
+                return Page();
+            }
+
+            var newQuiz = new Quiz
+            {
+                Title = Input.Title,
+                CourseId = Input.CourseId,
+                UserId = Input.UserId, // Set the user ID from the input
+                Questions = Input.Questions.Select(q => new Question
+                {
+                    QuizQuestion = q.QuizQuestion,
+                    CorrectAnswer = q.CorrectAnswer,
+                    IncorrectAnswer1 = q.IncorrectAnswer1,
+                    IncorrectAnswer2 = q.IncorrectAnswer2,
+                    IncorrectAnswer3 = q.IncorrectAnswer3
+                }).ToList()
+            };
+
+            try
+            {
+                _context.Quizzes.Add(newQuiz);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Quiz created successfully!";
+                return RedirectToPage("/Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"An error occurred while saving the quiz: {ex.Message}");
+                Users = _userManager.Users.ToList();  // Reload users if an exception is thrown
+                return Page();
+            }
+        }
+
 
         public class QuizInputModel
         {
@@ -25,56 +80,28 @@ namespace QuizProgram.Pages
             public string Title { get; set; }
 
             [Required]
-            [Display(Name = "Course Id")]
-            public string CourseId { get; set; } // In a real application, this should be chosen or provided by the user
+            [Display(Name = "Course ID")]
+            public string CourseId { get; set; }
 
             [Required]
-            public List<Question> Questions { get; set; } = new List<Question> { new Question() };
+            [Display(Name = "User")]
+            public string UserId { get; set; }  // Add User ID field
+
+            public List<QuestionInputModel> Questions { get; set; }
         }
 
-        public void OnGet()
+        public class QuestionInputModel
         {
-            Input = new QuizInputModel
-            {
-                // Initialize with one question and three empty incorrect answers by default
-                Questions = new List<Question> {
-            new Question {
-                IncorrectAnswers = new List<string> { "", "", "" }
-            }
-        }
-            };
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var newQuiz = new Quiz
-            {
-                Title = Input.Title,
-                CourseId = Input.CourseId, // This should ideally come from the user input or selected course
-                QuestionsJson = JsonSerializer.Serialize(Input.Questions),
-                // You should fetch the actual UserId of the logged-in user, for example:
-                // UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
-            };
-
-            try
-            {
-                _context.Quizzes.Add(newQuiz);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Quiz was added successfully!";
-                return RedirectToPage("./QuizList");
-            }
-            catch (Exception ex)
-            {
-                // Log the exception to the server logs
-                // Use a logging framework here, like ILogger
-                TempData["ErrorMessage"] = "An error occurred saving the quiz: " + ex.Message;
-                return Page();
-            }
+            [Required]
+            public string QuizQuestion { get; set; }
+            [Required]
+            public string CorrectAnswer { get; set; }
+            [Required]
+            public string IncorrectAnswer1 { get; set; }
+            [Required]
+            public string IncorrectAnswer2 { get; set; }
+            [Required]
+            public string IncorrectAnswer3 { get; set; }
         }
     }
 }
