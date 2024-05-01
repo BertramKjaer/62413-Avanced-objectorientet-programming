@@ -6,7 +6,7 @@ using QuizProgram.Data;
 
 namespace QuizProgram.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous] // Ensure it's accessible without authorization
+    [AllowAnonymous]
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

@@ -6,9 +6,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuizProgram.Pages
 {
+    [Authorize(Roles = "Professor")]
     public class CreateQuizModel : PageModel
     {
         private readonly QuizProgramContext _context;

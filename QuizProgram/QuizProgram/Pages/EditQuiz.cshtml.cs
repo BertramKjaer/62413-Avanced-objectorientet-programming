@@ -4,9 +4,11 @@ using QuizProgram.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuizProgram.Pages
 {
+    [Authorize(Roles = "Professor")]
     public class EditQuizModel : PageModel
     {
         private readonly QuizProgramContext _context;
