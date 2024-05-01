@@ -1,0 +1,109 @@
+﻿@page "{id:int}"
+@model QuizProgram.Pages.EditQuizModel
+
+<h2>Edit Quiz</h2>
+
+<form method="post">
+    <div class="form-group quiz-name">
+        <label asp-for="Input.Title">Quiz Title</label>
+        <input asp-for="Input.Title" class="form-control" />
+    </div>
+
+    <div class="quiz-section">
+        @for (int i = 0; i < Model.Input.Questions.Count; i++)
+        {
+            <div class="question-block">
+                <div class="form-group">
+                    <label asp-for="Input.Questions[i].QuizQuestion">Question @(i + 1)</label>
+                    <input asp-for="Input.Questions[i].QuizQuestion" class="form-control" />
+                    <label asp-for="Input.Questions[i].CorrectAnswer">Correct Answer</label>
+                    <input asp-for="Input.Questions[i].CorrectAnswer" class="form-control" />
+                    <label asp-for="Input.Questions[i].IncorrectAnswer1">Incorrect Answer 1</label>
+                    <input asp-for="Input.Questions[i].IncorrectAnswer1" class="form-control" />
+                    <label asp-for="Input.Questions[i].IncorrectAnswer2">Incorrect Answer 2</label>
+                    <input asp-for="Input.Questions[i].IncorrectAnswer2" class="form-control" />
+                    <label asp-for="Input.Questions[i].IncorrectAnswer3">Incorrect Answer 3</label>
+                    <input asp-for="Input.Questions[i].IncorrectAnswer3" class="form-control" />
+                    <button type="button" class="remove-question btn btn-danger" data-index="@i">Remove Question</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="button" id="addQuestion" class="btn btn-default">Add Another Question</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+<style>
+    .quiz-section {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .form-group.quiz-name, .form-group {
+        max-width: 600px; /* Adjust this as needed */
+        margin: 0 auto 20px auto; /* Center the quiz name input and add some bottom margin */
+        background: #f3f3f3;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .btn-default {
+        background-color: #e7e7e7;
+        color: black;
+        margin-right: 8px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn, .btn-danger {
+        padding: 8px 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+</style>
+
+@section Scripts {
+    <script>
+        function addNewQuestion() {
+            var questionCount = document.querySelectorAll('.question-block').length;
+            var newQuestionBlock = `
+                        <div class="question-block">
+                            <div class="form-group">
+                                <label>Question ${questionCount + 1}</label>
+                                <input type="text" name="Input.Questions[${questionCount}].QuizQuestion" class="form-control" />
+                                <label>Correct Answer</label>
+                                <input type="text" name="Input.Questions[${questionCount}].CorrectAnswer" class="form-control" />
+                                <label>Incorrect Answer 1</label>
+                                <input type="text" name="Input.Questions[${questionCount}].IncorrectAnswer1" class="form-control" />
+                                <label>Incorrect Answer 2</label>
+                                <input type="text" name="Input.Questions[${questionCount}].IncorrectAnswer2" class="form-control" />
+                                <label>Incorrect Answer 3</label>
+                                <input type="text" name="Input.Questions[${questionCount}].IncorrectAnswer3" class="form-control" />
+                                <button type="button" class="remove-question btn btn-danger" data-index="${questionCount}">Remove Question</button>
+                            </div>
+                        </div>`;
+            document.querySelector('.quiz-section').insertAdjacentHTML('beforeend', newQuestionBlock);
+        }
+
+        document.getElementById('addQuestion').addEventListener('click', addNewQuestion);
+        // You may also reuse or adjust the removeLastQuestion functionality
+    </script>
+}
+

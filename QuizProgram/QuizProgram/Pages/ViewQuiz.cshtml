@@ -17,7 +17,9 @@
         <ul>
             @foreach (var quiz in Model.Quizzes)
             {
-                <li>@quiz.Title - @quiz.Course.Name - @quiz.ApplicationUser.UserName</li>
+                <li>@quiz.Title - @quiz.Course.Name - @quiz.ApplicationUser.UserName
+                <a asp-page="/EditQuiz" asp-route-id="@quiz.QuizId" class="btn btn-primary">Edit Quiz</a>
+                </li>
             }
         </ul>
     </div>
