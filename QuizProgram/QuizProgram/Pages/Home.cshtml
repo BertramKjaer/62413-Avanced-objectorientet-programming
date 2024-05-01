@@ -6,7 +6,6 @@
 
 <div class="text-center">
     <h1 class="display-4">Home Page</h1>
-    <p>Example of how the front page could look for a professor entering the site</p>
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -16,7 +15,7 @@
     {
         <div class="col">
             <a asp-page="@GetPageLink(i)" class="icon-link">
-                <i class="fas fa-icons fa-3x"></i>
+                <i class="@(i == 1 ? "fas fa-plus-circle fa-5x" : "fas fa-list-alt fa-5x")"></i>
                 <p>
                     @(i switch
                     {
@@ -31,25 +30,54 @@
 </div>
 
 <style>
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 50vh; /* Reduced from 100vh to 70vh to move up the icons */
+        padding-top: 5vh; /* Additional top padding to adjust vertical position */
+    }
+
+    .col {
+        flex: 1; /* Distribute space equally */
+        display: flex;
+        justify-content: center; /* Center horizontally in the column */
+        align-items: center; /* Center vertically in the column */
+    }
+
     .icon-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 300px; /* Set width for the icon */
+        height: 300px; /* Adjusted height to make it a bit smaller */
         color: black;
         text-decoration: none;
-        display: block;
+        border-radius: 50%; /* Ensures the link is perfectly circular */
+        background: #f8f9fa;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Adds depth */
+        transition: transform 0.3s, color 0.3s;
     }
 
         .icon-link:hover {
-            color: #0056b3;
+            color: #007bff;
+            transform: translateY(-5px); /* Subtle lift effect */
             text-decoration: none;
         }
 
         .icon-link i {
-            margin-bottom: 0.5rem;
+            font-size: 60px; /* Larger font size for the icon */
         }
 
         .icon-link p {
-            margin: 0;
+            margin-top: 10px; /* Space between icon and text */
+            font-size: 1.5em; /* Larger text size */
+            font-weight: bold;
         }
 </style>
+
+
 
 @functions {
     private string GetPageLink(int index)
@@ -62,3 +90,4 @@
         };
     }
 }
+
