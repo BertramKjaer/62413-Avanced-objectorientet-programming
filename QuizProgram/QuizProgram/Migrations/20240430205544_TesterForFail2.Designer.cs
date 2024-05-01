@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizProgram.Data;
 
@@ -10,9 +11,11 @@ using QuizProgram.Data;
 namespace QuizProgram.Migrations
 {
     [DbContext(typeof(QuizProgramContext))]
-    partial class QuizProgramContextModelSnapshot : ModelSnapshot
+    [Migration("20240430205544_TesterForFail2")]
+    partial class TesterForFail2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -92,11 +95,9 @@ namespace QuizProgram.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -134,11 +135,9 @@ namespace QuizProgram.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
@@ -231,13 +230,6 @@ namespace QuizProgram.Migrations
                     b.HasKey("CourseId");
 
                     b.ToTable("Courses");
-
-                    b.HasData(
-                        new
-                        {
-                            CourseId = "62413",
-                            Name = "Advanced object oriented programming using C# and .NET"
-                        });
                 });
 
             modelBuilder.Entity("QuizProgram.Data.Question", b =>
@@ -273,7 +265,7 @@ namespace QuizProgram.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("QuizProgram.Data.Quiz", b =>
