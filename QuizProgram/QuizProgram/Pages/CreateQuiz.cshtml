@@ -124,25 +124,20 @@
         function addNewQuestion() {
             var questionCount = document.querySelectorAll('.question-block').length;
             var newQuestionBlock = `
-                        <div class="question-block">
-                            <div class="form-group">
-                                <label>Question ${questionCount + 1}</label>
-                                <input type="text" name="Input.Questions[${questionCount}].QuizQuestion" class="form-control" />
-                            </div>
-                            <div class="form-group">
-                                <label>Correct Answer</label>
-                                <input type="text" name="Input.Questions[${questionCount}].CorrectAnswer" class="form-control" />
-                            </div>`;
-
-            for (var i = 0; i < 3; i++) {
-                newQuestionBlock += `
-                            <div class="form-group">
-                                <label>Incorrect Answer ${i + 1}</label>
-                                <input type="text" name="Input.Questions[${questionCount}].IncorrectAnswers[${i}]" class="form-control" />
-                            </div>`;
-            }
-
-            newQuestionBlock += `</div>`;
+                <div class="question-block">
+                    <div class="form-group">
+                        <label>Question ${questionCount + 1}</label>
+                        <input type="text" name="Input.Questions[${questionCount}].QuizQuestion" class="form-control" />
+                        <label>Correct Answer</label>
+                        <input type="text" name="Input.Questions[${questionCount}].CorrectAnswer" class="form-control" />
+                        <label>Incorrect Answer 1</label>
+                        <input type="text" name="Input.Questions[${questionCount}].IncorrectAnswer1" class="form-control" />
+                        <label>Incorrect Answer 2</label>
+                        <input type="text" name="Input.Questions[${questionCount}].IncorrectAnswer2" class="form-control" />
+                        <label>Incorrect Answer 3</label>
+                        <input type="text" name="Input.Questions[${questionCount}].IncorrectAnswer3" class="form-control" />
+                    </div>
+                </div>`;
             document.querySelector('.quiz-section').insertAdjacentHTML('beforeend', newQuestionBlock);
         }
 
