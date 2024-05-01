@@ -37,7 +37,7 @@ public class LoginModel : PageModel
             if (result.Succeeded)
             {
                 _logger.LogInformation("User logged in.");
-                return Page();
+                return RedirectToPage("/Home");
             }
             else
             {
