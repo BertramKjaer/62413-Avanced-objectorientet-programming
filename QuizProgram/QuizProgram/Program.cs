@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using QuizProgram.Data;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,12 +14,22 @@ builder.Services.AddDbContext<QuizProgramContext>(options =>
         "Data Source=quiz.db"));
 
 // Login services
-builder.Services.AddDefaultIdentity<ApplicationUser>()
-    .AddEntityFrameworkStores<QuizProgramContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<QuizProgramContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<CourseService>();
 
 var app = builder.Build();
+
+// Obtain the role manager and user manager services
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    await IdentityDataInitializer.SeedData(userManager, roleManager);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -55,3 +66,21 @@ app.MapGet("/", async context =>
 });
 
 app.Run();
+
+public static class IdentityDataInitializer
+{
+    public static async Task SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    {
+        await EnsureRoleAsync(roleManager, "Professor");
+        await EnsureRoleAsync(roleManager, "Student");
+    }
+
+    private static async Task EnsureRoleAsync(RoleManager<IdentityRole> roleManager, string roleName)
+    {
+        var roleExists = await roleManager.RoleExistsAsync(roleName);
+        if (!roleExists)
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+}

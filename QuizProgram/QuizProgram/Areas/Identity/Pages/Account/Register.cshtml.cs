@@ -10,13 +10,16 @@ namespace QuizProgram.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -55,24 +58,15 @@ namespace QuizProgram.Areas.Identity.Pages.Account
                 var user = new ApplicationUser
                 {
                     UserName = Input.Email,
-                    Email = Input.Email,
-                    IsProfessor = Input.UserType == UserType.Professor,
-                    IsStudent = Input.UserType == UserType.Student
+                    Email = Input.Email
                 };
-                if (Input.UserType == UserType.Student)
-                {
-                    user.IsStudent = true;
-                    user.IsProfessor = false;
-                }
-                else if (Input.UserType == UserType.Professor)
-                {
-                    user.IsProfessor = true;
-                    user.IsStudent = false;
-                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    var role = Input.UserType == UserType.Professor ? "Professor" : "Student";
+                    await _userManager.AddToRoleAsync(user, role);
+
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect("/Home");
                 }
