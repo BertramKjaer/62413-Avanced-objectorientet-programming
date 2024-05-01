@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using QuizProgram.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using QuizProgram.Data;
+using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
 namespace QuizProgram.Pages
@@ -14,45 +12,40 @@ namespace QuizProgram.Pages
     public class ViewQuizModel : PageModel
     {
         private readonly QuizProgramContext _context;
-        private readonly ILogger<ViewQuizModel> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public List<Quiz> Quizzes { get; set; }
-        public List<ApplicationUser> Users { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public string SelectedUserId { get; set; }
 
-        public ViewQuizModel(QuizProgramContext context, ILogger<ViewQuizModel> logger)
+        public ViewQuizModel(QuizProgramContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _logger = logger;
+            _userManager = userManager;
         }
 
         public async Task OnGetAsync()
         {
-            Users = await _context.Users.ToListAsync();
-            if (!string.IsNullOrEmpty(SelectedUserId))
-            {
-                LoadQuizzes();
-            }
+            var currentUser = await _userManager.GetUserAsync(User);
+            Quizzes = await _context.Quizzes
+                                    .Include(q => q.Course)
+                                    .Include(q => q.ApplicationUser)
+                                    .Where(q => q.UserId == currentUser.Id)
+                                    .ToListAsync();
         }
 
-        private void LoadQuizzes()
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            Quizzes = _context.Quizzes
-                              .Include(q => q.Course)
-                              .Include(q => q.ApplicationUser)
-                              .Where(q => q.UserId == SelectedUserId)
-                              .ToList();
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            Users = await _context.Users.ToListAsync();
-            if (!string.IsNullOrEmpty(SelectedUserId))
+            var quiz = await _context.Quizzes.FindAsync(id);
+            if (quiz != null)
             {
-                LoadQuizzes();
+                _context.Quizzes.Remove(quiz);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Quiz deleted successfully!";
             }
-            return Page();
+            else
+            {
+                TempData["ErrorMessage"] = "Quiz not found!";
+            }
+            return RedirectToPage();
         }
     }
 }

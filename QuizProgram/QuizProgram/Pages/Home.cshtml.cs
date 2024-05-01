@@ -7,9 +7,11 @@ namespace QuizProgram.Pages
     [Authorize(Roles = "Professor,Student")]
     public class HomeModel : PageModel
     {
-        private readonly ILogger<HomeModel> _logger;
+        private readonly ILogger<HomeModel>
+    _logger;
 
-        public HomeModel(ILogger<HomeModel> logger)
+        public HomeModel(ILogger<HomeModel>
+            logger)
         {
             _logger = logger;
         }
