@@ -24,11 +24,9 @@ namespace QuizProgram.Pages
 
         [BindProperty]
         public QuizInputModel Input { get; set; }
-        public List<ApplicationUser> Users { get; set; }  // List to hold users for dropdown
 
         public async Task OnGetAsync()
         {
-            Users = _userManager.Users.ToList();  // Load all users for the dropdown
             Input = new QuizInputModel
             {
                 Questions = new List<QuestionInputModel> { new QuestionInputModel() }
@@ -37,40 +35,31 @@ namespace QuizProgram.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Users = await _userManager.Users.ToListAsync();
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                ModelState.AddModelError("", "Problem retrieving user information.");
+                return Page();
+            }
 
-            Debug.WriteLine("Received UserId: " + Input.UserId);
-
-            // Check if ModelState is valid
             if (!ModelState.IsValid)
             {
-                Users = _userManager.Users.ToList(); // Reload users in case of an error
                 return Page();
             }
 
-            // Check if User and Course exist
-            var userExists = await _userManager.FindByIdAsync(Input.UserId) != null;
             var courseExists = await _context.Courses.FindAsync(Input.CourseId) != null;
 
-            if (!userExists || !courseExists)
+            if (!courseExists)
             {
-                if (!userExists)
-                {
-                    ModelState.AddModelError("Input.UserId", "User does not exist.");
-                }
-                if (!courseExists)
-                {
-                    ModelState.AddModelError("Input.CourseId", "Course does not exist.");
-                }
+                ModelState.AddModelError("Input.CourseId", "Course does not exist.");
                 return Page();
             }
 
-            // Proceed to create the quiz
             var newQuiz = new Quiz
             {
                 Title = Input.Title,
                 CourseId = Input.CourseId,
-                UserId = Input.UserId,
+                UserId = currentUser.Id,
                 Questions = Input.Questions.Select(q => new Question
                 {
                     QuizQuestion = q.QuizQuestion,
@@ -91,7 +80,6 @@ namespace QuizProgram.Pages
             catch (Exception ex)
             {
                 ModelState.AddModelError("", $"An error occurred while saving the quiz: {ex.Message}");
-                Users = _userManager.Users.ToList();  // Reload users if an exception is thrown
                 return Page();
             }
         }
@@ -106,10 +94,6 @@ namespace QuizProgram.Pages
             [Required]
             [Display(Name = "Course ID")]
             public string CourseId { get; set; }
-
-            [Required]
-            [Display(Name = "User")]
-            public string UserId { get; set; }  // Add User ID field
 
             public List<QuestionInputModel> Questions { get; set; }
         }
