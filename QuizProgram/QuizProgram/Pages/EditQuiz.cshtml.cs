@@ -66,9 +66,20 @@ namespace QuizProgram.Pages
 
             quizToUpdate.Title = Input.Title; // Update the title
 
+            // Existing question IDs from the database
             var existingQuestionIds = quizToUpdate.Questions.Select(q => q.QuestionId).ToList();
+            // IDs from the input model
+            var inputQuestionIds = Input.Questions.Select(q => q.QuestionId).ToList();
 
-            // Update questions or add new ones
+            // Removing questions that are not present in the input model
+            var questionsToRemove = quizToUpdate.Questions
+                .Where(q => !inputQuestionIds.Contains(q.QuestionId)).ToList();
+            foreach (var question in questionsToRemove)
+            {
+                _context.Questions.Remove(question);
+            }
+
+            // Update or add questions
             foreach (var questionModel in Input.Questions)
             {
                 var question = quizToUpdate.Questions.FirstOrDefault(q => q.QuestionId == questionModel.QuestionId);
@@ -81,7 +92,7 @@ namespace QuizProgram.Pages
                     question.IncorrectAnswer2 = questionModel.IncorrectAnswer2;
                     question.IncorrectAnswer3 = questionModel.IncorrectAnswer3;
                 }
-                else if (!existingQuestionIds.Contains(questionModel.QuestionId))
+                else
                 {
                     // Add new question if it doesn't exist
                     quizToUpdate.Questions.Add(new Question
@@ -94,9 +105,6 @@ namespace QuizProgram.Pages
                     });
                 }
             }
-
-            // Optionally remove deleted questions
-            // You might need to adjust your model to flag questions for deletion
 
             try
             {
@@ -115,6 +123,7 @@ namespace QuizProgram.Pages
                 }
             }
         }
+
 
     }
 
