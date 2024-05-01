@@ -104,6 +104,24 @@
 
         document.getElementById('addQuestion').addEventListener('click', addNewQuestion);
         // You may also reuse or adjust the removeLastQuestion functionality
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-question')) {
+                var block = e.target.closest('.question-block');
+                block.remove(); // This removes the question block from the DOM
+
+                // Update the indices of remaining questions to maintain order
+                document.querySelectorAll('.question-block').forEach((block, index) => {
+                    block.querySelectorAll('input, label').forEach(el => {
+                        var name = el.name || el.htmlFor;
+                        if (name) {
+                            name = name.replace(/\d+/, index);
+                            if (el.tagName === 'INPUT') el.name = name;
+                            if (el.tagName === 'LABEL') el.htmlFor = name;
+                        }
+                    });
+                });
+            }
+        });
     </script>
 }
 
