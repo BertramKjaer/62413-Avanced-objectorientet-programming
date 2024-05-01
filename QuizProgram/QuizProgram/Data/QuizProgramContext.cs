@@ -13,6 +13,7 @@ namespace QuizProgram.Data {
         // Add DbSet properties for entities
         public DbSet<Course> Courses { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Question> Questions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,6 +23,8 @@ namespace QuizProgram.Data {
                 CourseId = "62413",
                 Name = "Advanced object oriented programming using C# and .NET"
             });
+
+            modelBuilder.Entity<Quiz>().Property(p => p.QuizId).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Course>()
                     .HasKey(c => c.CourseId); // Explicitly define CourseId as the primary key if not using convention
@@ -40,6 +43,12 @@ namespace QuizProgram.Data {
                 .HasMany(q => q.Questions)
                 .WithOne(q => q.Quiz)
                 .HasForeignKey(q => q.QuizId);
+
+            modelBuilder.Entity<Question>(entity =>
+            {
+                entity.ToTable("Question"); // Ensures EF uses the correct table name
+            });
+
         }
     }
 

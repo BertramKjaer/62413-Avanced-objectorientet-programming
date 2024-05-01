@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizProgram.Data;
 
@@ -10,9 +11,11 @@ using QuizProgram.Data;
 namespace QuizProgram.Migrations
 {
     [DbContext(typeof(QuizProgramContext))]
-    partial class QuizProgramContextModelSnapshot : ModelSnapshot
+    [Migration("20240501134737_QuestionDBSet")]
+    partial class QuestionDBSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -273,7 +276,7 @@ namespace QuizProgram.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("QuizProgram.Data.Quiz", b =>

@@ -52,7 +52,7 @@ namespace QuizProgram.Pages
         {
             if (!ModelState.IsValid)
             {
-                return Page(); // Validation failed, re-display the form
+                return Page(); // If model validation fails, re-display the form
             }
 
             var quizToUpdate = await _context.Quizzes
@@ -64,54 +64,35 @@ namespace QuizProgram.Pages
                 return NotFound($"Unable to load quiz with ID '{id}'.");
             }
 
-            // Update quiz title
             quizToUpdate.Title = Input.Title;
 
-            // List of question IDs from the form input
-            var inputQuestionIds = Input.Questions.Select(q => q.QuestionId).ToList();
+            // Track existing questions by their ID
+            var existingQuestions = quizToUpdate.Questions.ToDictionary(q => q.QuestionId);
 
-            // Identify questions to be removed
-            var questionsToRemove = quizToUpdate.Questions
-                .Where(q => !inputQuestionIds.Contains(q.QuestionId))
-                .ToList();
+            // Clear the questions to repopulate them
+            quizToUpdate.Questions.Clear();
 
-            // Remove questions directly from quizToUpdate
-            foreach (var question in questionsToRemove)
-            {
-                quizToUpdate.Questions.Remove(question);
-            }
-
-            // Update existing questions and add new ones
             foreach (var inputQuestion in Input.Questions)
             {
-                var question = quizToUpdate.Questions.FirstOrDefault(q => q.QuestionId == inputQuestion.QuestionId);
-                if (question != null)
+                Question question;
+                if (inputQuestion.QuestionId == 0 || !existingQuestions.TryGetValue(inputQuestion.QuestionId, out question))
                 {
-                    // Update existing question
-                    question.QuizQuestion = inputQuestion.QuizQuestion;
-                    question.CorrectAnswer = inputQuestion.CorrectAnswer;
-                    question.IncorrectAnswer1 = inputQuestion.IncorrectAnswer1;
-                    question.IncorrectAnswer2 = inputQuestion.IncorrectAnswer2;
-                    question.IncorrectAnswer3 = inputQuestion.IncorrectAnswer3;
+                    // New question
+                    question = new Question();
                 }
-                else
-                {
-                    // Add new question
-                    quizToUpdate.Questions.Add(new Question
-                    {
-                        QuizQuestion = inputQuestion.QuizQuestion,
-                        CorrectAnswer = inputQuestion.CorrectAnswer,
-                        IncorrectAnswer1 = inputQuestion.IncorrectAnswer1,
-                        IncorrectAnswer2 = inputQuestion.IncorrectAnswer2,
-                        IncorrectAnswer3 = inputQuestion.IncorrectAnswer3
-                    });
-                }
+                // Update question details
+                question.QuizQuestion = inputQuestion.QuizQuestion;
+                question.CorrectAnswer = inputQuestion.CorrectAnswer;
+                question.IncorrectAnswer1 = inputQuestion.IncorrectAnswer1;
+                question.IncorrectAnswer2 = inputQuestion.IncorrectAnswer2;
+                question.IncorrectAnswer3 = inputQuestion.IncorrectAnswer3;
+                quizToUpdate.Questions.Add(question);
             }
 
             try
             {
                 await _context.SaveChangesAsync();
-                return RedirectToPage("./ViewQuiz"); // Redirect after successful update
+                return RedirectToPage("./ViewQuiz");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -125,8 +106,6 @@ namespace QuizProgram.Pages
                 }
             }
         }
-
-
 
 
 

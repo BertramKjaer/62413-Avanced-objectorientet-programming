@@ -107,16 +107,14 @@
         document.addEventListener('click', function (e) {
             if (e.target.classList.contains('remove-question')) {
                 var block = e.target.closest('.question-block');
-                block.remove(); // This removes the question block from the DOM
+                block.remove(); // Removes the question block
 
-                // Update the indices of remaining questions to maintain order
+                // After removal, update indices to maintain sequence
                 document.querySelectorAll('.question-block').forEach((block, index) => {
                     block.querySelectorAll('input, label').forEach(el => {
-                        var name = el.name || el.htmlFor;
-                        if (name) {
-                            name = name.replace(/\d+/, index);
-                            if (el.tagName === 'INPUT') el.name = name;
-                            if (el.tagName === 'LABEL') el.htmlFor = name;
+                        var baseName = el.name.match(/Input\.Questions\[\d+\]\.(.*)/);
+                        if (baseName) {
+                            el.name = `Input.Questions[${index}].${baseName[1]}`; // Update the index in the name
                         }
                     });
                 });
